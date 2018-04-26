@@ -1,5 +1,8 @@
 require "bundler/setup"
+require "rails"
 require "warden_lake"
+
+require "action_controller"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

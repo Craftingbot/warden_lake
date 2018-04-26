@@ -1,11 +1,11 @@
-class SessionStrategy < ::Warden::Strategies::Base
+class PasswordStrategy < ::Warden::Strategies::Base
 
   def valid?
     identity && password
   end
 
   def auth_class
-    User
+    WardenLake.fetch_user_class(scope) || WardenLake.default_user_class
   end
 
   def authenticate!
