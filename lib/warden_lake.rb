@@ -15,6 +15,14 @@ module WardenLake
     @default_user_class ||= User
   end
 
+  def self.default_scope=(scope)
+    @default_user_class = @scope_mapping[scope]
+  end
+
+  def self.default_user_class
+    @default_user_class ||= User
+  end
+
   def self.add_scope_mapping(scope, user_class)
     @scope_mapping ||= {}
     @scope_mapping[:scope] = user_class
@@ -26,6 +34,14 @@ module WardenLake
 
   def self.scope_mapping
     @scope_mapping ||= {}
+  end
+
+  def self.identity_field=(identity_field)
+    @identity_field = identity_field
+  end
+
+  def self.identity_field
+    @identity_field
   end
 
   def self.fetch_user_class(scope)

@@ -3,15 +3,19 @@ module WardenLake
     extend ActiveSupport::Concern
 
     included do
-      helper_method :authenticated?, :current_user
+      helper_method :authenticated?, :user_hash
     end
 
     def authenticated?(*args)
       warden.authencated?(*args)
     end
 
-    def current_user(*args)
+    def user_values(*args)
       warden.user(*args)
+    end
+
+    def warden
+      request.env['warden']
     end
   end
 end
