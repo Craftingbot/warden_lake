@@ -37,14 +37,11 @@ Warden::Strategies.add(:password_strategy, WardenLake::Strategies::PasswordStrat
 
 Rails.application.config.middleware.use Warden::Manager do |manager|
   manager.default_strategies :password_strategy
-  manager.failure_app = lambda { |env|
-    UnauthorizedController.action(:new).call(env)
-  }
+  manager.failure_app = WardenLake::Delegator.new
 end
 
 ```
-The UnauthorizedController is one example, you can used what's you want,
-you also found more detail on [Warden]( https://github.com/wardencommunity/warden )
+You also found more detail on [Warden]( https://github.com/wardencommunity/warden )
 
 To config WardenLake in `warden.rb`, append config after warden config
 ```
@@ -90,6 +87,21 @@ class ApplicationController < ActionController::Base
   end
 end
 ```
+
+### Authentication
+You need make authentication when you have done configuration.
+WardenLake provide `fallback` as failure redirection when
+authenticating. For example, user login case:
+```ruby
+if warden.authenticate!(fallback: "#{controller_path}#new")
+  redirect_to get_started_path, notice: 'Logged in'
+else
+  render new_auths_sessions_path, alert: warden.message
+end
+```
+Putting `fallback` option in `authenticate!` method, fallback should be
+format in append with `#` between controller_path and action name, and
+it should be "login path"
 
 ## Development
 
